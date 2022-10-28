@@ -5,7 +5,9 @@
 int	main()
 {
 	int fd = open("file.txt", O_RDONLY);
-	printf("%s\n", get_next_line(fd));
+	int i = 0;
+	while (i++ < 7)
+		printf("Line: %s\n", get_next_line(fd));
 	close(fd);
 	return (0);
 }

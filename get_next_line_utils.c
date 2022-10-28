@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 16:45:13 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/27 21:04:59 by eballest         ###   ########.fr       */
+/*   Updated: 2022/10/28 17:57:14 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ static char	*coolfree(char **ptr)
 	return (NULL);
 }
 */
+
+int	ft_foundLine(char *str, int*i)
+{
+	while (str[*i] != '\0')
+	{
+		if (str[*i] == '\n')
+			return (*i);
+		*i = *i + 1;
+	}
+	return (-1);
+}
+
 char	*ft_addLine(char *str, char *line)
 {
 //	printf("entrem a add line\n");

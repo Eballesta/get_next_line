@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:20:46 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/27 21:04:48 by eballest         ###   ########.fr       */
+/*   Updated: 2022/10/28 17:56:09 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,12 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	ft_foundLine(char *str, int *i)
-{
-	while (str[*i] != '\0')
-	{
-		if (str[*i] == '\n')
-			return (*i);
-		*i = *i + 1;
-	}
-	return (-1);
-}
-
 char	*ft_readLine(char *str, int fd)
 {
 //	printf("a read line\n");
 	char	line[BUFFER_SIZE + 1];
 
-	if (read(fd, line, BUFFER_SIZE) < 0)
+	if (read(fd, line, BUFFER_SIZE) <= 0)
 	{
 		free(str);
 		return (NULL);
@@ -86,15 +75,18 @@ char	*ft_newLine(char *str, int i)
 	int	j;
 	char	*line;
 
+//	printf("Inici del new line i=%d\n", i);
 	line = (char *)malloc(i + 1);
 	if (!line)
 		return (NULL);
+//	printf("    Line= %s\n", line);
 	j = 0;
-	while (str[j] < i)
+	while (j < i)
 	{
 		line[j] = str[j];
 		j++;
 	}
+//	printf("     Line2=%s\n", line);
 	line[j] = '\0';
 	return (line);
 }
