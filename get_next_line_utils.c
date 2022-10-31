@@ -6,12 +6,11 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 16:45:13 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/28 18:42:14 by eballest         ###   ########.fr       */
+/*   Updated: 2022/10/31 12:04:55 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 int	ft_strlen(char *str)
 {
@@ -25,7 +24,7 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-int	ft_foundline(char *str, int*i)
+int	ft_foundline(char *str, unsigned int *i)
 {
 	while (str[*i] != '\0')
 	{
@@ -36,14 +35,14 @@ int	ft_foundline(char *str, int*i)
 	return (-1);
 }
 
-char	*ft_addline(char *str, char *line)
+char	*ft_addline(char *str, char *line, int lread)
 {
 	int		i;
 	int		j;
 	char	*newstr;
 
 	i = ft_strlen(str);
-	newstr = (char *)malloc(i + BUFFER_SIZE + 1);
+	newstr = (char *)malloc(i + lread + 1);
 	if (!newstr)
 		return (NULL);
 	j = 0;
@@ -53,7 +52,7 @@ char	*ft_addline(char *str, char *line)
 		j++;
 	}
 	j = 0;
-	while (j < BUFFER_SIZE)
+	while (j < lread)
 	{
 		newstr[i] = line[j];
 		i++;

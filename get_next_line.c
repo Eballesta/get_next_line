@@ -6,20 +6,20 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:20:46 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/28 18:48:29 by eballest         ###   ########.fr       */
+/*   Updated: 2022/10/31 15:17:50 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
-	static char	*str = NULL;
-	char		*line;
-	int			i;
+	static char		*str = NULL;
+	char			*line;
+	unsigned int	i;
+	int				lread;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	if (!str)
 	{
@@ -29,10 +29,10 @@ char	*get_next_line(int fd)
 		str[0] = '\0';
 	}
 	i = 0;
-	str = ft_read(str, &i, fd);
+	str = ft_read(str, &i, fd, &lread);
 	if (!str)
 		return (NULL);
-	line = ft_newline(str, i);
+	line = ft_newline(str, i, lread);
 	if (!line)
 		return (NULL);
 	str = ft_cleanline(str, i);
@@ -41,43 +41,43 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-char	*ft_read(char *str, int *i, int fd)
+char	*ft_read(char *str, unsigned int *i, int fd, int *lread)
 {
-	int	j;
-
 	while (ft_foundline(str, i) == -1)
 	{
-		str = ft_readline(str, fd, &j);
-		if (j == 0)
-			return (NULL);
+		str = ft_readline(str, fd, lread);
 		if (!str)
 			return (NULL);
 	}
 	return (str);
 }
 
-char	*ft_readline(char *str, int fd, int *j)
+char	*ft_readline(char *str, int fd, int *lread)
 {
 	char	line[BUFFER_SIZE + 1];
 
-	if (read(fd, line, BUFFER_SIZE) <= 0)
+	*lread = read(fd, line, BUFFER_SIZE);
+	if (*lread <= 0)
 	{
 		free(str);
 		return (NULL);
 	}
-	line[BUFFER_SIZE] = '\0';
-	str = ft_addline(str, line);
+	line[*lread] = '\0';
+	str = ft_addline(str, line, *lread);
 	if (!str)
 		return (NULL);
 	return (str);
 }
 
-char	*ft_newline(char *str, int i)
+char	*ft_newline(char *str, unsigned int i, int lread)
 {
-	int		j;
-	char	*line;
+	unsigned int	j;
+	char			*line;
 
-	line = (char *)malloc(i + 1);
+	if (str[i] == '\n' || lread < 0)
+		line = (char *)malloc(i + 2);
+	else
+		line = (char *)malloc(i + 1);
 	if (!line)
 		return (NULL);
 	j = 0;
@@ -86,11 +86,16 @@ char	*ft_newline(char *str, int i)
 		line[j] = str[j];
 		j++;
 	}
+	if (str[j] == '\n')
+	{
+		line[j] = '\n';
+		j++;
+	}
 	line[j] = '\0';
 	return (line);
 }
 
-char	*ft_cleanline(char *str, int i)
+char	*ft_cleanline(char *str, unsigned int i)
 {
 	char	*str2;
 	int		j;
