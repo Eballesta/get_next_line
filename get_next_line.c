@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:20:46 by eballest          #+#    #+#             */
-/*   Updated: 2022/11/01 15:45:41 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/01 20:25:24 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_next_line(int fd)
 	unsigned int	i;
 	int				lread;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!str)
 	{
