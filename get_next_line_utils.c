@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 16:45:13 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/31 12:04:55 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/01 15:18:45 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-int	ft_foundline(char *str, unsigned int *i)
+int	ft_foundline(char *str, unsigned int *i, int lread)
 {
 	while (str[*i] != '\0')
 	{
 		if (str[*i] == '\n')
 			return (*i);
 		*i = *i + 1;
+	}
+	if ((lread < BUFFER_SIZE && lread > 0) || (lread == 0 && *i > 0))
+	{
+		return (*i);
 	}
 	return (-1);
 }

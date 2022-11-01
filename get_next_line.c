@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:20:46 by eballest          #+#    #+#             */
-/*   Updated: 2022/10/31 15:17:50 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/01 15:45:41 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,44 @@ char	*get_next_line(int fd)
 	str = ft_read(str, &i, fd, &lread);
 	if (!str)
 		return (NULL);
-	line = ft_newline(str, i, lread);
+	line = ft_newline(str, i);
 	if (!line)
+	{
+		free(str);
 		return (NULL);
+	}
 	str = ft_cleanline(str, i);
 	if (!str)
+	{
+		free(line);
 		return (NULL);
+	}
 	return (line);
 }
 
 char	*ft_read(char *str, unsigned int *i, int fd, int *lread)
 {
-	while (ft_foundline(str, i) == -1)
+	while (ft_foundline(str, i, *lread) == -1)
 	{
-		str = ft_readline(str, fd, lread);
+		str = ft_readline(str, fd, *i, lread);
 		if (!str)
 			return (NULL);
 	}
 	return (str);
 }
 
-char	*ft_readline(char *str, int fd, int *lread)
+char	*ft_readline(char *str, int fd, int i, int *lread)
 {
 	char	line[BUFFER_SIZE + 1];
 
 	*lread = read(fd, line, BUFFER_SIZE);
-	if (*lread <= 0)
+	if (*lread < 0 || (*lread == 0 && i <= 0))
 	{
 		free(str);
 		return (NULL);
 	}
+	if (*lread == 0)
+		return (str);
 	line[*lread] = '\0';
 	str = ft_addline(str, line, *lread);
 	if (!str)
@@ -69,12 +77,12 @@ char	*ft_readline(char *str, int fd, int *lread)
 	return (str);
 }
 
-char	*ft_newline(char *str, unsigned int i, int lread)
+char	*ft_newline(char *str, unsigned int i)
 {
 	unsigned int	j;
 	char			*line;
 
-	if (str[i] == '\n' || lread < 0)
+	if (str[i] == '\n')
 		line = (char *)malloc(i + 2);
 	else
 		line = (char *)malloc(i + 1);
