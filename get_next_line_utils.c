@@ -6,11 +6,18 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 16:45:13 by eballest          #+#    #+#             */
-/*   Updated: 2022/11/01 15:18:45 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/04 19:06:08 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_free(char **str)
+{
+	free(*str);
+	*str = NULL;
+	return (NULL);
+}
 
 int	ft_strlen(char *str)
 {
@@ -45,16 +52,15 @@ char	*ft_addline(char *str, char *line, int lread)
 	int		j;
 	char	*newstr;
 
+	if (!str)
+		return (NULL);
 	i = ft_strlen(str);
 	newstr = (char *)malloc(i + lread + 1);
 	if (!newstr)
-		return (NULL);
+		return (ft_free(&str));
 	j = 0;
-	while (j < i)
-	{
-		newstr[j] = str[j];
-		j++;
-	}
+	while (j++ < i)
+		newstr[j - 1] = str[j - 1];
 	j = 0;
 	while (j < lread)
 	{
@@ -63,6 +69,6 @@ char	*ft_addline(char *str, char *line, int lread)
 		j++;
 	}
 	newstr[i] = '\0';
-	free(str);
+	ft_free(&str);
 	return (newstr);
 }

@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 16:45:52 by eballest          #+#    #+#             */
-/*   Updated: 2022/11/01 15:23:21 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/04 17:31:46 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ char	*ft_newline(char *str, unsigned int i);
 char	*ft_cleanline(char *str, unsigned int i);
 int		ft_strlen(char *str);
 char	*ft_addline(char *str, char *line, int lread);
+char	*ft_free(char **str);
 
 #endif

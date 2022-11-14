@@ -6,7 +6,7 @@
 /*   By: eballest <eballest@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:20:46 by eballest          #+#    #+#             */
-/*   Updated: 2022/11/01 20:25:24 by eballest         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:18:14 by eballest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,8 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = ft_newline(str, i);
 	if (!line)
-	{
-		free(str);
-		return (NULL);
-	}
+		return (ft_free(&str));
 	str = ft_cleanline(str, i);
-	if (!str)
-	{
-		free(line);
-		return (NULL);
-	}
 	return (line);
 }
 
@@ -64,10 +56,7 @@ char	*ft_readline(char *str, int fd, int i, int *lread)
 
 	*lread = read(fd, line, BUFFER_SIZE);
 	if (*lread < 0 || (*lread == 0 && i <= 0))
-	{
-		free(str);
-		return (NULL);
-	}
+		return (ft_free(&str));
 	if (*lread == 0)
 		return (str);
 	line[*lread] = '\0';
@@ -82,6 +71,8 @@ char	*ft_newline(char *str, unsigned int i)
 	unsigned int	j;
 	char			*line;
 
+	if (str[0] == '\0')
+		return (NULL);
 	if (str[i] == '\n')
 		line = (char *)malloc(i + 2);
 	else
@@ -108,9 +99,11 @@ char	*ft_cleanline(char *str, unsigned int i)
 	char	*str2;
 	int		j;
 
+	if (str[i] == '\0')
+		return (ft_free(&str));
 	str2 = (char *)malloc(ft_strlen(str) - i + 1);
-	if (!str)
-		return (NULL);
+	if (!str2)
+		return (ft_free(&str));
 	j = 0;
 	while (str[i] != '\0')
 	{
@@ -118,7 +111,13 @@ char	*ft_cleanline(char *str, unsigned int i)
 		str2[j] = str[i];
 		j++;
 	}
-	str2[j] = '\0';
-	free(str);
+	if (j > 0)
+		str2[j] = '\0';
+	else
+	{
+		free(str2);
+		return (ft_free(&str));
+	}
+	ft_free(&str);
 	return (str2);
 }
